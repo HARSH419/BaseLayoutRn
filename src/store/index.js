@@ -2,8 +2,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import { setupListeners } from '@reduxjs/toolkit/query';
 import { authApi, verificationApi } from '../services/authService';
 import { counterSlice } from './counterSlice';
-
-
+import logger from 'redux-logger';
 
 export const store = configureStore({
     reducer: {

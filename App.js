@@ -8,7 +8,7 @@
  * @format
  */
 import {View, Text, StyleSheet, StatusBar} from 'react-native';
-import React, {useState} from 'react';
+import React, {useState, useRef} from 'react';
 import {Provider} from 'react-redux';
 // import SplashScreen from 'react-native-splash-screen';
 import {NavigationContainer, StackActions} from '@react-navigation/native';
@@ -17,9 +17,52 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {navigationRef} from './src/utils/RootNavigation';
 import GetStarted from './src/screens/GetStarted';
 import Drawer from './src/screens/Drawer';
+import {store} from './src/store';
+import {normalize} from './src/utils/helper';
+import {LatoBold, LatoRegular} from './src/constants/fonts';
+import Toast, { BaseToast, ErrorToast } from 'react-native-toast-message';
+
+const toastConfig = {
+  success: props => (
+    <BaseToast
+      {...props}
+      style={{borderLeftColor: 'lightgreen'}}
+      // contentContainerStyle={{ paddingHorizontal: 15 }}
+      text1Style={{
+        fontWeight: 'normal',
+        fontFamily: LatoBold,
+        fontSize: normalize(19),
+      }}
+      text2Style={{
+        fontSize: normalize(17),
+        fontFamily: LatoRegular,
+        marginBottom: 10,
+        paddingBottom: 10,
+      }}
+      text2NumberOfLines={5}
+    />
+  ),
+  error: props => (
+    <ErrorToast
+      {...props}
+      text1Style={{
+        fontWeight: 'normal',
+        fontFamily: LatoBold,
+        fontSize: normalize(19),
+      }}
+      text2Style={{
+        fontSize: normalize(17),
+        fontFamily: LatoRegular,
+        marginBottom: 10,
+        paddingBottom: 10,
+      }}
+      text2NumberOfLines={5}
+    />
+  ),
+};
 
 const App = () => {
-  const [initialRouteName, setInitialRouteName] = useState();
+  const [initialRouteName, setInitialRouteName] = useState('drawer');
   const routeNameRef = useRef();
 
   const Stack = createNativeStackNavigator();
@@ -204,7 +247,7 @@ const App = () => {
       <SafeAreaProvider>
         <SafeAreaView style={styles.container}>
           <NavigationContainer
-            linking={linking}
+            // linking={linking}
             ref={navigationRef}
             onReady={() => {
               // console.log({
@@ -227,15 +270,24 @@ const App = () => {
               routeNameRef.current = currentRouteName;
             }}>
             <Stack.Navigator initialRouteName={'drawer'}>
-            <Stack.Screen name="drawer" component={Drawer} options={defaultStackSettings} />
-            <Stack.Screen name="getStarted" component={GetStarted} options={defaultStackSettings} />
-              {/* <View>
-                <Text>App</Text>
-              </View> */}
+              <Stack.Screen
+                name="drawer"
+                component={Drawer}
+                options={defaultStackSettings}
+              />
+              <Stack.Screen
+                name="getStarted"
+                component={GetStarted}
+                options={defaultStackSettings}
+              />
             </Stack.Navigator>
           </NavigationContainer>
         </SafeAreaView>
       </SafeAreaProvider>
+      <Toast position="bottom" config={toastConfig} />
+      {/* <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <Text>App</Text>
+      </View> */}
     </Provider>
   );
 };
@@ -243,7 +295,7 @@ const App = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: black,
+    backgroundColor: 'white',
   },
   sectionContainer: {
     marginTop: 32,
