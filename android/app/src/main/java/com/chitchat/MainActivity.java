@@ -3,6 +3,7 @@ package com.chitchat;
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;
 import com.facebook.react.ReactRootView;
+import android.os.Bundle; //For react-native-Screens
 
 public class MainActivity extends ReactActivity {
 
@@ -14,6 +15,12 @@ public class MainActivity extends ReactActivity {
   protected String getMainComponentName() {
     return "ChitChat";
   }
+
+  //For react-native-Screens 👇
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(null);
+  }  
 
   /**
    * Returns the instance of the {@link ReactActivityDelegate}. There the RootView is created and
