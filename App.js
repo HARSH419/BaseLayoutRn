@@ -10,10 +10,13 @@
 import {View, Text, StyleSheet, StatusBar} from 'react-native';
 import React, {useState} from 'react';
 import {Provider} from 'react-redux';
+// import SplashScreen from 'react-native-splash-screen';
 import {NavigationContainer, StackActions} from '@react-navigation/native';
 import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import { navigationRef } from './src/utils/RootNavigation';
+import {navigationRef} from './src/utils/RootNavigation';
+import GetStarted from './src/screens/GetStarted';
+import Drawer from './src/screens/Drawer';
 
 const App = () => {
   const [initialRouteName, setInitialRouteName] = useState();
@@ -21,13 +24,13 @@ const App = () => {
 
   const Stack = createNativeStackNavigator();
 
-  const hideSplash = async () => {
-    try {
-      SplashScreen.hide();
-    } catch (error) {
-      console.log({ error });
-    }
-  };
+  // const hideSplash = async () => {
+  //   try {
+  //     SplashScreen.hide();
+  //   } catch (error) {
+  //     console.log({ error });
+  //   }
+  // };
 
   // async function isUserAlreadyLoggedIn() {
   //   try {
@@ -47,46 +50,45 @@ const App = () => {
   //   }
   // }
 
-  useEffect(() => {
-    // (async () => {
-    //   let value = await isUserAlreadyLoggedIn();
-    //   await fetchEnv();
-    //   await messaging().requestPermission();
-    //   await messaging().registerDeviceForRemoteMessages();
-    //   messaging()
-    //     .getInitialNotification()
-    //     .then((remoteMessage) => {
-    //       console.log('getInitialNotification', { remoteMessage });
-    //       if (value) {
-    //         //wait for Home screen to load
-    //         setInitialRouteName('Home');
-    //         if (remoteMessage?.data?.FormId) {
-    //           setTimeout(() => {
-    //             navigationRef?.navigate('ScreenQuestions', {
-    //               appointmentDetails: {
-    //                 ...remoteMessage?.data,
-    //               },
-    //             });
-    //           }, 1000);
-    //         }
-    //       } else setInitialRouteName('Login');
-    //       hideSplash();
-    //     });
-    //   const firebaseToken = await messaging().getToken();
-    //   console.log(firebaseToken, 'firebaseToken');
+  // useEffect(() => {
+  // (async () => {
+  //   let value = await isUserAlreadyLoggedIn();
+  //   await fetchEnv();
+  //   await messaging().requestPermission();
+  //   await messaging().registerDeviceForRemoteMessages();
+  //   messaging()
+  //     .getInitialNotification()
+  //     .then((remoteMessage) => {
+  //       console.log('getInitialNotification', { remoteMessage });
+  //       if (value) {
+  //         //wait for Home screen to load
+  //         setInitialRouteName('Home');
+  //         if (remoteMessage?.data?.FormId) {
+  //           setTimeout(() => {
+  //             navigationRef?.navigate('ScreenQuestions', {
+  //               appointmentDetails: {
+  //                 ...remoteMessage?.data,
+  //               },
+  //             });
+  //           }, 1000);
+  //         }
+  //       } else setInitialRouteName('Login');
+  //       hideSplash();
+  //     });
+  //   const firebaseToken = await messaging().getToken();
+  //   console.log(firebaseToken, 'firebaseToken');
 
-    // })();
+  // })();
 
-    // const unsubscribe = messaging().onMessage((notification) => {
-    //   console.log({ notification }, 'notification');
-    //   localNotification(notification);
-    // });
+  // const unsubscribe = messaging().onMessage((notification) => {
+  //   console.log({ notification }, 'notification');
+  //   localNotification(notification);
+  // });
 
-    // return unsubscribe;
-    hideSplash();
+  // return unsubscribe;
+  //   hideSplash();
 
-
-  }, []);
+  // }, []);
 
   // useEffect(() => {
   //   (async () => {
@@ -187,6 +189,10 @@ const App = () => {
   if (!initialRouteName) {
     return <></>;
   }
+  const defaultStackSettings = {
+    headerShown: false,
+    gestureEnabled: false,
+  };
 
   return (
     <Provider store={store}>
@@ -211,7 +217,7 @@ const App = () => {
               const previousRouteName = routeNameRef.current;
               const currentRouteName =
                 navigationRef.current.getCurrentRoute().name;
-              console.log({previousRouteName,currentRouteName});
+              console.log({previousRouteName, currentRouteName});
               // if (previousRouteName !== currentRouteName) {
               //   await analytics().logScreenView({
               //     screen_name: currentRouteName,
@@ -220,10 +226,12 @@ const App = () => {
               // }
               routeNameRef.current = currentRouteName;
             }}>
-              <Stack.Navigator initialRouteName={initialRouteName}>
-            <View>
-              <Text>App</Text>
-            </View>
+            <Stack.Navigator initialRouteName={'drawer'}>
+            <Stack.Screen name="drawer" component={Drawer} options={defaultStackSettings} />
+            <Stack.Screen name="getStarted" component={GetStarted} options={defaultStackSettings} />
+              {/* <View>
+                <Text>App</Text>
+              </View> */}
             </Stack.Navigator>
           </NavigationContainer>
         </SafeAreaView>

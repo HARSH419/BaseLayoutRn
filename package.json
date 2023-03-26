@@ -7,11 +7,14 @@
     "ios": "react-native run-ios",
     "start": "react-native start",
     "test": "jest",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "mk": "adb kill-server",
+    "mr": "adb reverse tcp:8081 tcp:8081"
   },
   "dependencies": {
     "@notifee/react-native": "^7.6.1",
     "@react-native-community/checkbox": "^0.5.15",
+    "@react-native-firebase/app": "^17.4.0",
     "@react-native-firebase/messaging": "^17.4.0",
     "@react-navigation/native": "^6.1.6",
     "@react-navigation/native-stack": "^6.9.12",
