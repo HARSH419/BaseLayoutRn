@@ -7,15 +7,20 @@
  *
  * @format
  */
-import { View, Text, StyleSheet } from 'react-native'
+import { View, Text, StyleSheet, StatusBar } from 'react-native'
 import React, { useState } from 'react'
+import { Provider } from 'react-redux';
+
 
 const App = () => {
   const [initialRouteName, setInitialRouteName] = useState();
   return (
-    <View>
-      <Text>App</Text>
-    </View>
+    <Provider store={store}>
+      <StatusBar translucent={true} backgroundColor={'transparent'} barStyle="light-content" />
+      <View>
+        <Text>App</Text>
+      </View>
+    </Provider>
   )
 }
 
