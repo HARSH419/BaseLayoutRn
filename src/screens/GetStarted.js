@@ -1,12 +1,19 @@
-import { View, Text } from 'react-native'
-import React from 'react'
+import {View, Text, Pressable} from 'react-native';
+import React from 'react';
+import {useNavigation} from '@react-navigation/core';
 
-const GetStarted = () => {
+const GetStarted = ({navigation}) => {
+  // const navigation = useNavigation();
+  console.log({navigation});
   return (
-    <View>
-      <Text>GetStarted</Text>
+    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+      <Pressable onPress={() => {
+        navigation.navigate('drawer');
+      }}>
+        <Text>GetStartedss</Text>
+      </Pressable>
     </View>
-  )
-}
+  );
+};
 
-export default GetStarted
+export default GetStarted;

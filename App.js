@@ -21,7 +21,8 @@ import {store} from './src/store';
 import {normalize} from './src/utils/helper';
 import {LatoBold, LatoRegular} from './src/constants/fonts';
 import Toast, { BaseToast, ErrorToast } from 'react-native-toast-message';
-
+import { createStackNavigator, TransitionPresets, CardStyleInterpolators } from '@react-navigation/stack';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 const toastConfig = {
   success: props => (
     <BaseToast
@@ -65,7 +66,7 @@ const App = () => {
   const [initialRouteName, setInitialRouteName] = useState('drawer');
   const routeNameRef = useRef();
 
-  const Stack = createNativeStackNavigator();
+  const Stack = createStackNavigator();
 
   // const hideSplash = async () => {
   //   try {
@@ -237,58 +238,85 @@ const App = () => {
     gestureEnabled: false,
   };
 
+  const config = {
+    animation: 'spring',
+    config: {
+      stiffness: 10000,
+      damping: 5000,
+      mass: 3,
+      overshootClamping: true,
+      restDisplacementThreshold: 0.0001,
+      restSpeedThreshold: 0.0001,
+    },
+  };
+
+  console.log({TransitionPresets: TransitionPresets, CardStyleInterpolators});
+
   return (
-    <Provider store={store}>
-      <StatusBar
-        translucent={true}
-        backgroundColor={'transparent'}
-        barStyle="dark-content"
-      />
-      <SafeAreaProvider>
-        <SafeAreaView style={styles.container}>
-          <NavigationContainer
-            // linking={linking}
-            ref={navigationRef}
-            onReady={() => {
-              // console.log({
-              //   OnReady: navigationRef.current.getCurrentRoute().name,
-              // });
-              routeNameRef.current =
-                navigationRef.current.getCurrentRoute().name;
-            }}
-            onStateChange={async () => {
-              const previousRouteName = routeNameRef.current;
-              const currentRouteName =
-                navigationRef.current.getCurrentRoute().name;
-              console.log({previousRouteName, currentRouteName});
-              // if (previousRouteName !== currentRouteName) {
-              //   await analytics().logScreenView({
-              //     screen_name: currentRouteName,
-              //     screen_class: currentRouteName,
-              //   });
-              // }
-              routeNameRef.current = currentRouteName;
-            }}>
-            <Stack.Navigator initialRouteName={'drawer'}>
-              <Stack.Screen
-                name="drawer"
-                component={Drawer}
-                options={defaultStackSettings}
-              />
-              <Stack.Screen
-                name="getStarted"
-                component={GetStarted}
-                options={defaultStackSettings}
-              />
-            </Stack.Navigator>
-          </NavigationContainer>
-        </SafeAreaView>
-      </SafeAreaProvider>
-      <Toast position="bottom" config={toastConfig} />
-      {/* <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-        <Text>App</Text>
-      </View> */}
-    </Provider>
+    <GestureHandlerRootView style={styles.root}>
+      <Provider store={store}>
+        <StatusBar
+          translucent={true}
+          backgroundColor={'transparent'}
+          barStyle="dark-content"
+        />
+        <SafeAreaProvider>
+          <SafeAreaView style={styles.container}>
+            <NavigationContainer
+              // linking={linking}
+              ref={navigationRef}
+              onReady={() => {
+                // console.log({
+                //   OnReady: navigationRef.current.getCurrentRoute().name,
+                // });
+                routeNameRef.current =
+                  navigationRef.current.getCurrentRoute().name;
+              }}
+              onStateChange={async () => {
+                const previousRouteName = routeNameRef.current;
+                const currentRouteName =
+                  navigationRef.current.getCurrentRoute().name;
+                console.log({previousRouteName, currentRouteName});
+                // if (previousRouteName !== currentRouteName) {
+                //   await analytics().logScreenView({
+                //     screen_name: currentRouteName,
+                //     screen_class: currentRouteName,
+                //   });
+                // }
+                routeNameRef.current = currentRouteName;
+              }}>
+              <Stack.Navigator initialRouteName={'getStarted'}>
+                <Stack.Screen
+                  name="drawer"
+                  component={Drawer}
+                  // options={defaultStackSettings}
+                  options={{
+                    // ...defaultStackSettinx1gs,
+                    headerShown: false,
+                    gestureEnabled: true,
+                    // cardStyleInterpolator: CardStyleInterpolators,
+                    // ...TransitionPresets.SlideFromLeftIOS,
+                    // transitionSpec: {
+                    //   open: config,
+                    //   close: config,
+                    // },
+                  }}
+                />
+                <Stack.Screen
+                  name="getStarted"
+                  component={GetStarted}
+                  options={defaultStackSettings}
+                />
+              </Stack.Navigator>
+            </NavigationContainer>
+          </SafeAreaView>
+        </SafeAreaProvider>
+        <Toast position="bottom" config={toastConfig} />
+        {/* <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+          <Text>App</Text>
+        </View> */}
+      </Provider>
+    </GestureHandlerRootView>
   );
 };
 
@@ -296,6 +324,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'white',
+  },
+  root: {
+    flex: 1,
   },
   sectionContainer: {
     marginTop: 32,
